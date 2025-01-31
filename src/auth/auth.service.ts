@@ -6,6 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from './entities/user.entity';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.tdo';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -15,14 +16,17 @@ export class AuthService {
 
   async signup(dto: SignupDto): Promise<{ message: string }> {
     const { name, email, password, confirmPassword } = dto;
-
+    console.log("pass",password);
+    console.log("confirmPassword",confirmPassword);
+    
+    
     if (password !== confirmPassword) {
       throw new BadRequestException('Passwords do not match');
     }
 
     const existingUser = await this.userRepository.findOne({ where: { email } });
     if (existingUser) {
-      throw new BadRequestException('User already exists');
+      throw new BadRequestException('email already exists');
     }
 
     const hashedPassword =await bcrypt.hash(password, 10);
@@ -46,7 +50,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const token = this.jwtService.sign({ id: user.id, email: user.email });
+    const token = this.jwtService.sign({ id: user.id, email: user.email }, { secret: process.env.SECRET_KEY, expiresIn: '24h' });
 
     return { accessToken: token };
   }

@@ -12,12 +12,10 @@ export class SignupDto {
   
   @ApiProperty({ example:"12345yhsdgfg", description: 'Password field minimum 8 character'})
   @MinLength(6)
-  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, {
-    message: 'Password must contain at least one letter and one number',
-  })
   password: string;
 
   @ApiProperty({ example:"12345yhsdgfg",description: 'to confirm password'})
   @IsNotEmpty()
+  @MinLength(6)
   confirmPassword: string;
 }

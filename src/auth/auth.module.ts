@@ -12,7 +12,7 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot(),
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'mysecretkey',
+      secret: process.env.SECRET_KEY,
     }),
   ],
   controllers: [AuthController],
